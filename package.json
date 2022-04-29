@@ -9,11 +9,21 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxt-hero-icons/outline": "^1.0.1",
+    "@nuxt-hero-icons/solid": "^1.0.1",
+    "@nuxtjs/axios": "^5.13.6",
     "core-js": "^3.15.1",
-    "nuxt": "^2.15.7"
+    "npm-watch": "^0.11.0",
+    "nuxt": "^2.15.7",
+    "vue-axios": "^3.4.0",
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
-    "@nuxt/typescript-build": "^2.1.0"
+    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/tailwindcss": "^4.2.1",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.3",
+    "tailwindcss": "^2.2.19"
   }
 }

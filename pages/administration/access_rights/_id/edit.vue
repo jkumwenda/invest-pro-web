@@ -1,0 +1,95 @@
+<template>
+  <div>
+    <div
+      class="flex items-center bg-turquoise-500 text-turquoise-100 p-5 rounded-xl align-middle"
+    >
+      <h2 class="flex-1 text-xl font-semibold">Update Access Right</h2>
+      <div></div>
+    </div>
+    <div class="my-5 font-semibold">
+      <form
+        class="w-8/12 bg-white rounded-xl p-8"
+        v-on:submit.prevent="updateAccessRight"
+      >
+        <div class="w-4/4 md:w-3/4 mb-6 mr-auto">
+          <input
+            class="appearance-none border-2 border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-tory-blue-500"
+            id="inline-full-name"
+            type="text"
+            placeholder="Access Right"
+            name="access_right"
+            v-model="accessRightData.access_right"
+          />
+        </div>
+
+        <div class="w-4/4 md:w-3/4 mb-6 mr-auto">
+          <input
+            class="appearance-none border-2 border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-tory-blue-500"
+            id="inline-full-name"
+            type="text"
+            placeholder="Access Right Code"
+            name="code"
+            v-model="accessRightData.code"
+          />
+        </div>
+
+        <div class="w-4/4 md:w-3/4 mr-auto">
+          <button
+            class="shadow bg-tory-blue-500 hover:bg-tory-blue-400 focus:shadow-outline focus:outline-none text-white py-3 px-4 rounded-xl uppercase text-sm font-medium"
+            type="submit"
+          >
+            Save Access Right
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import { update, get } from "~/services/api.service";
+export default Vue.extend({
+  layout: "logged",
+  data() {
+    return {
+      loading: false,
+      success: false,
+      errored: false,
+      accessRightData: {
+        access_right: "",
+        code: "",
+      },
+    };
+  },
+  created() {
+    this.getAccessRight();
+  },
+  methods: {
+    getAccessRight() {
+      get(this.$axios, "access_right/" + this.$route.params.id + "/")
+        .then((result) => {
+          this.accessRightData.access_right = result.access_right;
+          this.accessRightData.code = result.code;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    updateAccessRight() {
+      update(
+        this.$axios,
+        "access_right/" + this.$route.params.id + "/",
+        this.accessRightData
+      )
+        .then((results) => {
+          this.$router.push("/administration/access_rights/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+});
+</script>
