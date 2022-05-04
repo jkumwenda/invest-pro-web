@@ -31,21 +31,25 @@
         <div class="p-5 flex-auto">
           {{ access_right.code }}
         </div>
-        <div class="p-5 w-max flex flex-row bg-black">
+        <div class="p-5 w-max flex flex-row bg-tory-blue-500 text-tory-blue-50">
           <nuxt-link
             :to="`/administration/access_rights/${access_right.access_right_id}`"
-            ><solid-eye-icon class="h-8 w-8"
+            ><solid-eye-icon class="h-6 w-6"
           /></nuxt-link>
           <nuxt-link
             :to="`/administration/access_rights/${access_right.access_right_id}/edit`"
-            ><solid-pencil-icon class="h-8 w-8"
+            ><solid-pencil-icon class="h-6 w-6"
           /></nuxt-link>
-          <div
-            class="cursor-pointer"
-            @click="deleteAccessRight(access_right.access_right_id)"
-          >
-            <solid-trash-icon class="h-8 w-8" />
+          <div class="cursor-pointer" @click="showConfirmDeleteModal()">
+            <solid-trash-icon class="h-6 w-6" />
           </div>
+          <confirm-delete
+            v-show="isConfirmDeleteModalVisible"
+            modalHeadline="Delete confirm"
+            deleteMessage="This action cannot be undone. Are you sure? "
+            @deleteRecordEvent="deleteAccessRight(access_right.access_right_id)"
+            @close="closeConfirmDeleteModal"
+          ></confirm-delete>
         </div>
       </div>
     </div>
@@ -55,11 +59,14 @@
 <script lang="ts">
 import Vue from "vue";
 import { get, destroy } from "~/services/api.service";
+import ConfirmDelete from "~/components/ConfirmDelete.vue";
 
 export default Vue.extend({
+  components: { ConfirmDelete },
   layout: "logged",
   data() {
     return {
+      isConfirmDeleteModalVisible: false,
       access_rights: {},
       count: "",
       previous: "",
@@ -68,9 +75,18 @@ export default Vue.extend({
   },
 
   methods: {
+    showConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = true;
+    },
+    closeConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = false;
+    },
     deleteAccessRight(id: Number) {
       destroy(this.$axios, "access_right/" + id + "/")
-        .then((results) => {})
+        .then((results) => {
+          this.isConfirmDeleteModalVisible = false;
+          window.location.reload();
+        })
         .catch((error) => {
           console.log(error);
         });

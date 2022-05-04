@@ -47,7 +47,7 @@ export default Vue.extend({
   layout: "login",
   head() {
     return {
-      title: "ArDash - Welcome",
+      title: "InvestPro - Welcome",
     };
   },
   data() {

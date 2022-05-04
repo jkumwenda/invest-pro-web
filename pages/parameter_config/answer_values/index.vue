@@ -17,8 +17,7 @@
     </div>
     <div class="my-5">
       <div class="flex font-semibold">
-        <div class="p-5 w-4/12">Answer</div>
-        <div class="p-5 w-4/12">Type</div>
+        <div class="p-5 w-5/12">Answer</div>
         <div class="p-5 flex-auto">Value</div>
       </div>
       <div
@@ -26,26 +25,27 @@
         v-for="answer_value in answer_values"
         :key="answer_value.answer_value_id"
       >
-        <div class="p-5 w-4/12">
+        <div class="p-5 w-5/12">
           {{ answer_value.answer_value }}
-        </div>
-        <div class="p-5 w-4/12">
-          {{ answer_value.answer_type.answer_type }}
         </div>
         <div class="p-5 flex-auto">
           {{ answer_value.value }}
         </div>
-        <div class="p-5 w-max flex flex-row bg-black">
+        <div class="p-5 w-max flex flex-row bg-tory-blue-500 text-tory-blue-50">
           <nuxt-link
             :to="`/parameter_config/answer_values/${answer_value.answer_value_id}/edit`"
-            ><solid-pencil-icon class="h-8 w-8"
+            ><solid-pencil-icon class="h-6 w-6"
           /></nuxt-link>
-          <div
-            class="cursor-pointer"
-            @click="deleteAnswerValue(answer_value.answer_value_id)"
-          >
-            <solid-trash-icon class="h-8 w-8" />
+          <div class="cursor-pointer" @click="showConfirmDeleteModal()">
+            <solid-trash-icon class="h-6 w-6" />
           </div>
+          <confirm-delete
+            v-show="isConfirmDeleteModalVisible"
+            modalHeadline="Delete confirm"
+            deleteMessage="This action cannot be undone. Are you sure? "
+            @deleteRecordEvent="deleteAnswerValue(answer_value.answer_value_id)"
+            @close="closeConfirmDeleteModal"
+          ></confirm-delete>
         </div>
       </div>
     </div>
@@ -55,11 +55,14 @@
 <script lang="ts">
 import Vue from "vue";
 import { get, destroy } from "~/services/api.service";
+import ConfirmDelete from "~/components/ConfirmDelete.vue";
 
 export default Vue.extend({
   layout: "logged",
+  components: { ConfirmDelete },
   data() {
     return {
+      isConfirmDeleteModalVisible: false,
       answer_values: {},
       count: "",
       previous: "",
@@ -68,9 +71,18 @@ export default Vue.extend({
   },
 
   methods: {
+    showConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = true;
+    },
+    closeConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = false;
+    },
     deleteAnswerValue(id: Number) {
       destroy(this.$axios, "answer_value/" + id + "/")
-        .then((results) => {})
+        .then((results) => {
+          this.isConfirmDeleteModalVisible = false;
+          window.location.reload();
+        })
         .catch((error) => {
           console.log(error);
         });

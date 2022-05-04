@@ -28,6 +28,7 @@
             id="grid-state"
             v-model="answerValueData.answer_type_id"
           >
+            <option value="" disabled hidden>Select Age</option>
             <option
               v-for="answer_type in answer_types"
               :value="answer_type.answer_type_id"

@@ -1,5 +1,5 @@
 <template>
-  <div>Content HEREDASHBOARD</div>
+  <div></div>
 </template>
 
 <script lang="ts">

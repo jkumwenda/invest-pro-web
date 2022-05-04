@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col lg:flex-row h-screen w-full font-nunito text-shuttle-gray-500"
+    class="flex flex-col lg:flex-row min-h-screen w-full font-nunito text-shuttle-gray-500"
   >
     <div class="w-12/2 lg:w-2/12 p-6 drop-shadow-md">
       <Sidebar />

@@ -27,10 +27,10 @@
         <div class="p-5 w-full">
           {{ parameter_category.parameter_category }}
         </div>
-        <div class="p-5 w-max flex flex-row bg-black">
+        <div class="p-5 w-max flex flex-row bg-tory-blue-500 text-tory-blue-50">
           <nuxt-link
             :to="`/parameter_config/parameter_categories/${parameter_category.parameter_category_id}/edit`"
-            ><solid-pencil-icon class="h-8 w-8"
+            ><solid-pencil-icon class="h-6 w-6"
           /></nuxt-link>
           <div
             class="cursor-pointer"
@@ -38,7 +38,7 @@
               deleteParameterCategory(parameter_category.parameter_category_id)
             "
           >
-            <solid-trash-icon class="h-8 w-8" />
+            <solid-trash-icon class="h-6 w-6" />
           </div>
         </div>
       </div>
@@ -49,11 +49,14 @@
 <script lang="ts">
 import Vue from "vue";
 import { get, destroy } from "~/services/api.service";
+import ConfirmDelete from "~/components/ConfirmDelete.vue";
 
 export default Vue.extend({
   layout: "logged",
+  components: { ConfirmDelete },
   data() {
     return {
+      isConfirmDeleteModalVisible: false,
       parameter_categories: {},
       count: "",
       previous: "",
@@ -62,9 +65,18 @@ export default Vue.extend({
   },
 
   methods: {
+    showConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = true;
+    },
+    closeConfirmDeleteModal() {
+      this.isConfirmDeleteModalVisible = false;
+    },
     deleteParameterCategory(id: Number) {
       destroy(this.$axios, "parameter_category/" + id + "/")
-        .then((results) => {})
+        .then((results) => {
+          this.isConfirmDeleteModalVisible = false;
+          window.location.reload();
+        })
         .catch((error) => {
           console.log(error);
         });
